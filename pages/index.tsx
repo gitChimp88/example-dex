@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
+import Swap from '../components/Swap';
 let Web3 = require('web3');
 
 const Home: NextPage = () => {
@@ -64,6 +65,7 @@ const Home: NextPage = () => {
         ) : (
           <button onClick={connectWallet}>Connect wallet</button>
         )}
+        <Swap />
       </main>
 
       <footer className={styles.footer}>
