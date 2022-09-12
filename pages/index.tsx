@@ -5,6 +5,8 @@ import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import Swap from '../components/Swap';
+import { ChainsTokensToolsProvider } from "../components/providers/chainsTokensToolsProvider";
+
 let Web3 = require('web3');
 
 const Home: NextPage = () => {
@@ -34,7 +36,6 @@ const Home: NextPage = () => {
   }, []);
 
   const connectWallet = () => {
-    debugger;
     window.ethereum
       ? window.ethereum
           .request({ method: 'eth_requestAccounts' })
@@ -46,9 +47,6 @@ const Home: NextPage = () => {
           .catch((err: any) => console.log(err))
       : console.log('Please install MetaMask');
   };
-
-  console.log('address - ', address);
-  console.log('web3 - ', web3);
 
   return (
     <div className={styles.container}>
@@ -65,7 +63,10 @@ const Home: NextPage = () => {
         ) : (
           <button onClick={connectWallet}>Connect wallet</button>
         )}
-        <Swap />
+        <ChainsTokensToolsProvider>    
+          <Swap />
+        </ChainsTokensToolsProvider>
+
       </main>
 
       <footer className={styles.footer}>

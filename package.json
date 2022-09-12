@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@lifi/sdk": "^1.5.0",
     "antd": "^4.22.7",
     "next": "12.2.5",
     "react": "18.2.0",
