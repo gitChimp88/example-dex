@@ -1,21 +1,33 @@
 import { Row, Col, Form, Select, Input, Button } from 'antd';
 import ChainSelect from './ChainSelect';
-import { Chain, ChainKey } from './types'
+import { Chain, ChainKey } from './types';
 
 const { Option } = Select;
 
 interface SwapFormProps {
-  depositChain?: ChainKey
-  setDepositChain: Function
-  availableChains: Array<Chain>
+  depositChain?: ChainKey;
+  setDepositChain: Function;
+  availableChains: Array<Chain>;
+  setWithdrawChain: Function;
+  withdrawChain?: ChainKey;
 }
 
-function SwapForm({ availableChains, depositChain, setDepositChain } : SwapFormProps) {
-
+function SwapForm({
+  availableChains,
+  depositChain,
+  setDepositChain,
+  setWithdrawChain,
+  withdrawChain,
+}: SwapFormProps) {
   const onChangeDepositChain = (chainKey: ChainKey) => {
     //TODO: add logic to deal with changing tokens automatically on chain change.
-    setDepositChain(chainKey)
-  }
+    setDepositChain(chainKey);
+  };
+
+  const onChangeWithdrawChain = (chainKey: ChainKey) => {
+    //TODO: add logic to deal with changing tokens automatically on chain change.
+    setWithdrawChain(chainKey);
+  };
 
   return (
     <>
@@ -43,7 +55,10 @@ function SwapForm({ availableChains, depositChain, setDepositChain } : SwapFormP
                 borderBottomLeftRadius: '0px !important',
               }}
             >
-              <Select defaultValue="Ethereum" style={{ width: 200, position: 'relative' }}>
+              <Select
+                defaultValue="Ethereum"
+                style={{ width: 200, position: 'relative' }}
+              >
                 <Option value="Ethereum">Eth</Option>
                 <Option value="Matic">Matic</Option>
               </Select>
@@ -73,19 +88,19 @@ function SwapForm({ availableChains, depositChain, setDepositChain } : SwapFormP
           <Row gutter={[0, 0]} style={{ marginBottom: 8 }}>
             <Col span={12}>
               <div>
-                <Select defaultValue="Ethereum" style={{ width: 120 }}>
-                  <Option value="Ethereum">Ethereum</Option>
-                  <Option value="Bsc">Bsc</Option>
-                  <Option value="disabled" disabled>
-                    Disabled
-                  </Option>
-                  <Option value="Polygon">Polygon</Option>
-                </Select>
+                <ChainSelect
+                  availableChains={availableChains}
+                  selectedChain={withdrawChain}
+                  onChangeSelectedChain={onChangeWithdrawChain}
+                />
               </div>
             </Col>
             <Col span={12}>
               <div>
-                <Select defaultValue="Ethereum"  style={{ width: 200, position: 'relative' }}>
+                <Select
+                  defaultValue="Ethereum"
+                  style={{ width: 200, position: 'relative' }}
+                >
                   <Option value="Ethereum">Eth</Option>
                   <Option value="Matic">Matic</Option>
                 </Select>

@@ -1,4 +1,4 @@
-import { TokenWithAmounts } from './index'
+import { TokenWithAmounts } from './index';
 export interface TokenAmountList {
-  [ChainKey: string]: Array<TokenWithAmounts>
+  [ChainKey: string]: Array<TokenWithAmounts>;
 }

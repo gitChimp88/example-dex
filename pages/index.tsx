@@ -5,7 +5,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import Swap from '../components/Swap';
-import { ChainsTokensToolsProvider } from "../components/providers/chainsTokensToolsProvider";
+import { ChainsTokensToolsProvider } from '../components/providers/chainsTokensToolsProvider';
 
 let Web3 = require('web3');
 
@@ -63,10 +63,9 @@ const Home: NextPage = () => {
         ) : (
           <button onClick={connectWallet}>Connect wallet</button>
         )}
-        <ChainsTokensToolsProvider>    
+        <ChainsTokensToolsProvider>
           <Swap />
         </ChainsTokensToolsProvider>
-
       </main>
 
       <footer className={styles.footer}>

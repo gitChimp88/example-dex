@@ -1,9 +1,9 @@
-import { ChainId } from '../types'
-import { deepClone } from '../services/utils'
+import { ChainId } from '../types';
+import { deepClone } from '../services/utils';
 
 const load = (value?: string) => {
-  return value ? value.split(',') : []
-}
+  return value ? value.split(',') : [];
+};
 
 const customRpc: Record<number, (string | undefined)[]> = {
   [ChainId.ETH]: load(process.env.REACT_APP_RPC_URL_MAINNET),
@@ -25,15 +25,15 @@ const customRpc: Record<number, (string | undefined)[]> = {
   [ChainId.OPTT]: load(process.env.REACT_APP_RPC_URL_OPTIMISM_KOVAN),
   [ChainId.MUM]: load(process.env.REACT_APP_RPC_URL_POLYGON_MUMBAI),
   [ChainId.BSCT]: load(process.env.REACT_APP_RPC_URL_BSC_TESTNET),
-}
+};
 
 export const getRpcs = (): Record<number, string[]> => {
-  const rpcs = deepClone(customRpc)
+  const rpcs = deepClone(customRpc);
   Object.keys(rpcs).forEach((key) => {
     if (!rpcs[key] || !rpcs[key].length || !rpcs[key][0]) {
-      delete rpcs[key]
+      delete rpcs[key];
     }
-  })
+  });
 
-  return rpcs
-}
+  return rpcs;
+};

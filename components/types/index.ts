@@ -1,1 +1,1 @@
-export * from '@lifi/sdk'
+export * from '@lifi/sdk';
