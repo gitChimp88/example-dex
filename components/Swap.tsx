@@ -4,7 +4,8 @@ import { Row, Col, Button } from 'antd';
 import { useChainsTokensTools } from './providers/chainsTokensToolsProvider';
 import Title from 'antd/lib/typography/Title';
 import SwapForm from './SwapForm';
-import { ChainKey, Chain } from './types';
+import { ChainKey, Chain, TokenAmount } from './types';
+import { TokenAmountList } from './types/internal.types';
 
 function Swap() {
   const chainsTokensTools = useChainsTokensTools();
@@ -13,6 +14,15 @@ function Swap() {
     chainsTokensTools.chains
   );
   const [toChainKey, setToChainKey] = useState<ChainKey | undefined>();
+  const [tokens, setTokens] = useState<TokenAmountList>(
+    chainsTokensTools.tokens
+  );
+  const [balances, setBalances] = useState<{
+    [ChainKey: string]: Array<TokenAmount>;
+  }>();
+  const [fromTokenAddress, setFromTokenAddress] = useState<
+    string | undefined
+  >();
 
   // get chains
   useEffect(() => {
@@ -47,6 +57,10 @@ function Swap() {
                   availableChains={availableChains}
                   withdrawChain={toChainKey}
                   setWithdrawChain={setToChainKey}
+                  tokens={tokens}
+                  balances={balances}
+                  setDepositToken={setFromTokenAddress}
+                  depositToken={fromTokenAddress}
                 />
                 <Row style={{ marginTop: 24 }} justify={'center'}>
                   <Button style={{ width: '100%', height: '60px' }}>

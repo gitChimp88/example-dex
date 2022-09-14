@@ -1,6 +1,9 @@
+import { useRef } from 'react';
+import { RefSelectProps } from 'antd/lib/select';
 import { Row, Col, Form, Select, Input, Button } from 'antd';
 import ChainSelect from './ChainSelect';
-import { Chain, ChainKey } from './types';
+import { Chain, ChainKey, TokenWithAmounts, TokenAmount } from './types';
+import TokenSelect from './TokenSelect';
 
 const { Option } = Select;
 
@@ -10,6 +13,10 @@ interface SwapFormProps {
   availableChains: Array<Chain>;
   setWithdrawChain: Function;
   withdrawChain?: ChainKey;
+  tokens: { [ChainKey: string]: Array<TokenWithAmounts> };
+  balances: { [ChainKey: string]: Array<TokenAmount> } | undefined;
+  depositToken?: string;
+  setDepositToken: Function;
 }
 
 function SwapForm({
@@ -18,7 +25,12 @@ function SwapForm({
   setDepositChain,
   setWithdrawChain,
   withdrawChain,
+  tokens,
+  balances,
+  depositToken,
+  setDepositToken,
 }: SwapFormProps) {
+  const depositSelectRef = useRef<RefSelectProps>();
   const onChangeDepositChain = (chainKey: ChainKey) => {
     //TODO: add logic to deal with changing tokens automatically on chain change.
     setDepositChain(chainKey);
@@ -27,6 +39,20 @@ function SwapForm({
   const onChangeWithdrawChain = (chainKey: ChainKey) => {
     //TODO: add logic to deal with changing tokens automatically on chain change.
     setWithdrawChain(chainKey);
+  };
+
+  const onChangeDepositToken = (tokenAddress: string) => {
+    // unselect
+    depositSelectRef?.current?.blur();
+
+    if (!depositChain) return;
+    // connect
+    if (tokenAddress === 'connect') {
+      // Then connect wallet
+      return;
+    }
+    // set token
+    setDepositToken(tokenAddress);
   };
 
   return (
@@ -55,13 +81,15 @@ function SwapForm({
                 borderBottomLeftRadius: '0px !important',
               }}
             >
-              <Select
-                defaultValue="Ethereum"
-                style={{ width: 200, position: 'relative' }}
-              >
-                <Option value="Ethereum">Eth</Option>
-                <Option value="Matic">Matic</Option>
-              </Select>
+              <TokenSelect
+                tokens={tokens}
+                balances={balances}
+                selectedChain={depositChain}
+                selectedToken={depositToken}
+                onChangeSelectedToken={onChangeDepositToken}
+                selectReference={depositSelectRef}
+                grayed={true}
+              />
             </div>
           </Col>
         </Row>

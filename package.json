@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@lifi/sdk": "^1.5.0",
+    "@web3-react/core": "^6.1.9",
     "antd": "^4.22.7",
     "next": "12.2.5",
     "react": "18.2.0",
