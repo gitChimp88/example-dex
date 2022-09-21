@@ -27,8 +27,6 @@ interface TokenSelectProps {
   disabled?: boolean;
 }
 
-const positionFixed = window.location.pathname.includes('showcase');
-
 const TokenSelect = ({
   tokens,
   balances,
@@ -159,8 +157,8 @@ const TokenSelect = ({
   }
 
   return (
-    <>
-      <div>
+    <div style={{ display: 'flex' }}>
+      <div style={{ width: '50px' }}>
         <Tooltip title={getTooltip()}>
           <Avatar size="small" src={token?.logoURI} alt={token?.name}>
             {token ? token.name : '?'}
@@ -206,7 +204,7 @@ const TokenSelect = ({
         }
         dropdownStyle={{
           minWidth: 300,
-          position: positionFixed ? 'fixed' : 'relative',
+          position: 'fixed',
         }}
         ref={(select) => {
           if (select) {
@@ -290,12 +288,7 @@ const TokenSelect = ({
                     : '')
                 }
               >
-                <div
-                  className={
-                    'option-item ' +
-                    (grayed && token.amount?.eq(0) ? 'disabled' : '')
-                  }
-                >
+                <div style={{ display: 'flex' }}>
                   <span role="img" aria-label={token.symbol}>
                     <Avatar
                       size="small"
@@ -318,7 +311,7 @@ const TokenSelect = ({
           <Select.OptGroup label="Please select a chain first"></Select.OptGroup>
         )}
       </Select>
-    </>
+    </div>
   );
 };
 

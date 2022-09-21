@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Content } from 'antd/lib/layout/layout';
 import { Row, Col, Button } from 'antd';
-import { useChainsTokensTools } from './providers/chainsTokensToolsProvider';
+import {
+  ChainsTokensToolsProvider,
+  useChainsTokensTools,
+} from './providers/chainsTokensToolsProvider';
 import Title from 'antd/lib/typography/Title';
 import SwapForm from './SwapForm';
 import { ChainKey, Chain, TokenAmount } from './types';
@@ -28,9 +31,11 @@ function Swap() {
   useEffect(() => {
     console.log('chains from lifi - ', chainsTokensTools.chains);
     setAvailableChains(chainsTokensTools.chains);
-
-    // load()
   }, [chainsTokensTools.chains]);
+
+  useEffect(() => {
+    setTokens(chainsTokensTools.tokens);
+  }, [chainsTokensTools.tokens]);
 
   return (
     <>
