@@ -220,7 +220,7 @@ const TokenSelect = ({
         }}
       >
         {/* Separate between Owned and All token if more than 6 */}
-        {selectedChain && tokens[selectedChain]?.length > 6 && (
+        {selectedChain && tokens[selectedChain]?.length > 2 && (
           <Select.OptGroup label="Owned Token">
             {!web3.account && (
               <Select.Option key="Select Coin" value="connect">
@@ -236,40 +236,40 @@ const TokenSelect = ({
               )}
             {balances &&
               balances[selectedChain] &&
-              tokens[selectedChain]
-                .filter((token) => token.amount?.gt(0))
-                .map((token) => (
-                  <Select.Option
-                    key={'own_' + token.address}
-                    value={token.address}
-                    label={token.symbol + ' ' + token.name}
-                    data-label={
-                      token.symbol +
-                      (balances && showBalance && token.amountRendered
-                        ? ' (' + token.amountRendered + ')'
-                        : '')
-                    }
-                  >
-                    <div className="option-item">
-                      <span role="img" aria-label={token.symbol}>
-                        <Avatar
-                          size="small"
-                          src={token.logoURI}
-                          alt={token.symbol}
-                          style={{ marginRight: 10 }}
-                        >
-                          {token.symbol[0]}
-                        </Avatar>
-                      </span>
-                      <span className="option-name">
-                        {token.symbol} - {token.name}
-                      </span>
-                      <span className="option-balance">
-                        {token.amountRendered}
-                      </span>
-                    </div>
-                  </Select.Option>
-                ))}
+              balances[selectedChain]
+                .filter((token) => token.amount !== '0')
+                .map((token) => {
+                  return (
+                    <Select.Option
+                      key={'own_' + token.address}
+                      value={token.address}
+                      label={token.symbol + ' ' + token.name}
+                      data-label={
+                        token.symbol +
+                        (balances && showBalance && token.amount
+                          ? ' (' + token.amount + ')'
+                          : '')
+                      }
+                    >
+                      <div className="option-item">
+                        <span role="img" aria-label={token.symbol}>
+                          <Avatar
+                            size="small"
+                            src={token.logoURI}
+                            alt={token.symbol}
+                            style={{ marginRight: 10 }}
+                          >
+                            {token.symbol[0]}
+                          </Avatar>
+                        </span>
+                        <span className="option-name">
+                          {token.symbol} - {token.name}
+                        </span>
+                        <span className="option-balance"> {token.amount}</span>
+                      </div>
+                    </Select.Option>
+                  );
+                })}
           </Select.OptGroup>
         )}
 

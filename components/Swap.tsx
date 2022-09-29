@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { Web3Provider } from '@ethersproject/providers';
+import { useWeb3React } from '@web3-react/core';
 import { Content } from 'antd/lib/layout/layout';
 import { Row, Col, Button } from 'antd';
+import LiFi from './providers/LiFi';
 import {
   ChainsTokensToolsProvider,
   useChainsTokensTools,
@@ -11,6 +14,9 @@ import { ChainKey, Chain, TokenAmount } from './types';
 import { TokenAmountList } from './types/internal.types';
 
 function Swap() {
+  // Wallet
+  const web3 = useWeb3React<Web3Provider>();
+
   const chainsTokensTools = useChainsTokensTools();
   const [fromChainKey, setFromChainKey] = useState<ChainKey | undefined>();
   const [availableChains, setAvailableChains] = useState<Chain[]>(
@@ -36,6 +42,31 @@ function Swap() {
   useEffect(() => {
     setTokens(chainsTokensTools.tokens);
   }, [chainsTokensTools.tokens]);
+
+  const updateBalances = useCallback(async () => {
+    if (web3.account) {
+      // one call per chain to show balances as soon as the request comes back
+      Object.entries(tokens).forEach(([chainKey, tokenList]) => {
+        LiFi.getTokenBalances(web3.account!, tokenList).then(
+          (portfolio: any) => {
+            setBalances((balances) => {
+              if (!balances) balances = {};
+              return {
+                ...balances,
+                [chainKey]: portfolio,
+              };
+            });
+          }
+        );
+      });
+    }
+  }, [web3.account, tokens]);
+
+  useEffect(() => {
+    if (web3.account) {
+      updateBalances();
+    }
+  }, [web3.account, updateBalances]);
 
   return (
     <>
