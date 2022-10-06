@@ -32,6 +32,7 @@ function Swap() {
   const [fromTokenAddress, setFromTokenAddress] = useState<
     string | undefined
   >();
+  const [toTokenAddress, setToTokenAddress] = useState<string | undefined>();
 
   // get chains
   useEffect(() => {
@@ -97,6 +98,8 @@ function Swap() {
                   balances={balances}
                   setDepositToken={setFromTokenAddress}
                   depositToken={fromTokenAddress}
+                  setWithdrawToken={setToTokenAddress}
+                  withdrawToken={toTokenAddress}
                 />
                 <Row style={{ marginTop: 24 }} justify={'center'}>
                   <Button style={{ width: '100%', height: '60px' }}>

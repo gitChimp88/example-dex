@@ -17,6 +17,8 @@ interface SwapFormProps {
   balances: { [ChainKey: string]: Array<TokenAmount> } | undefined;
   depositToken?: string;
   setDepositToken: Function;
+  setWithdrawToken: Function;
+  withdrawToken?: string;
 }
 
 function SwapForm({
@@ -29,8 +31,12 @@ function SwapForm({
   balances,
   depositToken,
   setDepositToken,
+  setWithdrawToken,
+  withdrawToken,
 }: SwapFormProps) {
   const depositSelectRef = useRef<RefSelectProps>();
+  const withdrawSelectRef = useRef<RefSelectProps>();
+
   const onChangeDepositChain = (chainKey: ChainKey) => {
     //TODO: add logic to deal with changing tokens automatically on chain change.
     setDepositChain(chainKey);
@@ -53,6 +59,20 @@ function SwapForm({
     }
     // set token
     setDepositToken(tokenAddress);
+  };
+
+  const onChangeWithdrawToken = (tokenId: string) => {
+    // unselect
+    withdrawSelectRef?.current?.blur();
+
+    // connect
+    if (tokenId === 'connect') {
+      // Then connect wallet
+      return;
+    }
+
+    // set token
+    setWithdrawToken(tokenId);
   };
 
   return (
@@ -125,13 +145,15 @@ function SwapForm({
             </Col>
             <Col span={12}>
               <div>
-                <Select
-                  defaultValue="Ethereum"
-                  style={{ width: 200, position: 'relative' }}
-                >
-                  <Option value="Ethereum">Eth</Option>
-                  <Option value="Matic">Matic</Option>
-                </Select>
+                <TokenSelect
+                  tokens={tokens}
+                  balances={balances}
+                  selectedChain={withdrawChain}
+                  selectedToken={withdrawToken}
+                  onChangeSelectedToken={onChangeWithdrawToken}
+                  selectReference={withdrawSelectRef}
+                  grayed={false}
+                />
               </div>
             </Col>
           </Row>
