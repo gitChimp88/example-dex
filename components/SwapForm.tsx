@@ -1,9 +1,10 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { RefSelectProps } from 'antd/lib/select';
 import { Row, Col, Form, Select, Input, Button } from 'antd';
 import ChainSelect from './ChainSelect';
 import { Chain, ChainKey, TokenWithAmounts, TokenAmount } from './types';
 import TokenSelect from './TokenSelect';
+import BigNumber from 'bignumber.js';
 
 const { Option } = Select;
 
@@ -19,6 +20,10 @@ interface SwapFormProps {
   setDepositToken: Function;
   setWithdrawToken: Function;
   withdrawToken?: string;
+  depositAmount: BigNumber;
+  setDepositAmount: Function;
+  withdrawAmount: BigNumber;
+  setWithdrawAmount: Function;
 }
 
 function SwapForm({
@@ -33,9 +38,14 @@ function SwapForm({
   setDepositToken,
   setWithdrawToken,
   withdrawToken,
+  depositAmount,
+  withdrawAmount,
+  setWithdrawAmount,
+  setDepositAmount,
 }: SwapFormProps) {
   const depositSelectRef = useRef<RefSelectProps>();
   const withdrawSelectRef = useRef<RefSelectProps>();
+  const [depositAmountString, setDepositAmountString] = useState<string>('');
 
   const onChangeDepositChain = (chainKey: ChainKey) => {
     //TODO: add logic to deal with changing tokens automatically on chain change.
@@ -73,6 +83,21 @@ function SwapForm({
 
     // set token
     setWithdrawToken(tokenId);
+  };
+
+  const onChangeDepositAmount = (amount: string) => {
+    setDepositAmountString(amount);
+    setDepositAmount(new BigNumber(amount));
+    setWithdrawAmount(new BigNumber(Infinity));
+  };
+
+  const onChangeWithdrawAmount = (amount: BigNumber) => {
+    setDepositAmount(new BigNumber(Infinity));
+    setWithdrawAmount(amount);
+  };
+
+  const formatAmountInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    return new BigNumber(e.currentTarget.value);
   };
 
   return (
@@ -121,6 +146,10 @@ function SwapForm({
                 type="number"
                 defaultValue={0.0}
                 min={0}
+                value={depositAmountString}
+                onChange={(event) =>
+                  onChangeDepositAmount(event.currentTarget.value)
+                }
               />
               <Button type="text">MAX</Button>
             </div>
@@ -169,6 +198,9 @@ function SwapForm({
                   placeholder="..."
                   bordered={false}
                   disabled
+                  onChange={(event) =>
+                    onChangeWithdrawAmount(formatAmountInput(event))
+                  }
                 />
               </div>
             </Col>
