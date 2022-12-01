@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { RefSelectProps } from 'antd/lib/select';
-import { Row, Col, Form, Select, Input, Button } from 'antd';
+import { Row, Col, Form, Select, Input, Button, Tooltip } from 'antd';
 import ChainSelect from './ChainSelect';
 import { Chain, ChainKey, TokenWithAmounts, TokenAmount } from './types';
 import TokenSelect from './TokenSelect';
@@ -24,6 +24,8 @@ interface SwapFormProps {
   setDepositAmount: Function;
   withdrawAmount: BigNumber;
   setWithdrawAmount: Function;
+  estimatedWithdrawAmount: string;
+  estimatedMinWithdrawAmount?: string;
 }
 
 function SwapForm({
@@ -42,6 +44,8 @@ function SwapForm({
   withdrawAmount,
   setWithdrawAmount,
   setDepositAmount,
+  estimatedWithdrawAmount,
+  estimatedMinWithdrawAmount,
 }: SwapFormProps) {
   const depositSelectRef = useRef<RefSelectProps>();
   const withdrawSelectRef = useRef<RefSelectProps>();
@@ -198,10 +202,21 @@ function SwapForm({
                   placeholder="..."
                   bordered={false}
                   disabled
+                  value={estimatedWithdrawAmount}
                   onChange={(event) =>
                     onChangeWithdrawAmount(formatAmountInput(event))
                   }
                 />
+                {!!estimatedMinWithdrawAmount && (
+                  <Tooltip
+                    color={'gray'}
+                    title={`The final amount might change due to slippage but will not fall below ${estimatedMinWithdrawAmount}`}
+                  >
+                    <span style={{ cursor: 'pointer' }} className="amountBadge">
+                      ?
+                    </span>
+                  </Tooltip>
+                )}
               </div>
             </Col>
           </Row>

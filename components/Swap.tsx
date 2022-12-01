@@ -16,8 +16,10 @@ import {
   RoutesResponse,
 } from './types';
 import { TokenAmountList } from './types/internal.types';
+import { RouteList } from './RouteList/RouteList';
 import BigNumber from 'bignumber.js';
 import { v4 as uuid } from 'uuid';
+import { formatTokenAmount, formatTokenAmountOnly } from './services/utils';
 
 let currentRouteCallId: string;
 
@@ -107,6 +109,21 @@ function Swap() {
     [tokens]
   );
 
+  // set route call results
+  useEffect(() => {
+    if (routeCallResult) {
+      const { result, id } = routeCallResult;
+      if (id === currentRouteCallId) {
+        setRoutes(result.routes);
+        setHighlightedIndex(result.routes.length === 0 ? -1 : 0);
+        setNoRoutesAvailable(result.routes.length === 0);
+        setRoutesLoading(false);
+        // transactionInfoRef.current?.scrollIntoView({ behavior: 'smooth' })
+        // setActiveTransactionInfoTabKey('1')
+      }
+    }
+  }, [routeCallResult, currentRouteCallId]);
+
   useEffect(() => {
     const getTransferRoutes = async () => {
       setRoutes([]);
@@ -175,6 +192,27 @@ function Swap() {
     findToken,
   ]);
 
+  const getSelectedWithdraw = () => {
+    if (highlightedIndex === -1) {
+      return {
+        estimate: '0.0',
+      };
+    } else {
+      const selectedRoute = routes[highlightedIndex];
+      const lastStep = selectedRoute.steps[selectedRoute.steps.length - 1];
+      return {
+        estimate: formatTokenAmountOnly(
+          lastStep.action.toToken,
+          lastStep.estimate?.toAmount
+        ),
+        min: formatTokenAmount(
+          lastStep.action.toToken,
+          lastStep.estimate?.toAmountMin
+        ),
+      };
+    }
+  };
+
   return (
     <>
       <Content
@@ -210,6 +248,8 @@ function Swap() {
                   depositAmount={depositAmount}
                   withdrawAmount={withdrawAmount}
                   setWithdrawAmount={setWithdrawAmount}
+                  estimatedWithdrawAmount={getSelectedWithdraw().estimate}
+                  estimatedMinWithdrawAmount={getSelectedWithdraw().min}
                 />
                 <Row style={{ marginTop: 24 }} justify={'center'}>
                   <Button style={{ width: '100%', height: '60px' }}>
@@ -217,6 +257,23 @@ function Swap() {
                   </Button>
                 </Row>
               </div>
+            </Col>
+            <Col sm={23} lg={23} xl={14}>
+              {routesLoading || noRoutesAvailable || routes.length ? (
+                <RouteList
+                  highlightedIndex={highlightedIndex}
+                  routes={routes}
+                  routesLoading={routesLoading}
+                  noRoutesAvailable={noRoutesAvailable}
+                  setHighlightedIndex={setHighlightedIndex}
+                />
+              ) : (
+                <Row style={{ paddingTop: 48 }}>
+                  <Title level={4} disabled>
+                    To get available routes, input your desired tokens to swap.
+                  </Title>
+                </Row>
+              )}
             </Col>
           </Row>
         </div>

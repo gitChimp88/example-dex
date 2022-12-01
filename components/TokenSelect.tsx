@@ -11,7 +11,6 @@ import { useWeb3React } from '@web3-react/core';
 import { Avatar, Badge, Select, Tooltip } from 'antd';
 import { RefSelectProps } from 'antd/lib/select';
 import React, { useEffect, useState } from 'react';
-
 import { goplus, TokenSecurity, TokenSecurityState } from './services/goplus';
 import { ChainKey, TokenAmount, TokenWithAmounts } from './types';
 
