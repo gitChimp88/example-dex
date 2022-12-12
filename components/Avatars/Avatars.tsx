@@ -1,8 +1,6 @@
 import { ChainKey, getChainByKey, Step, Token } from '@lifi/sdk';
 import { Avatar, Tooltip, Image } from 'antd';
 
-// import lifiLogo from '/LiFi.svg';
-
 const lifiLogo = () => <Image src="/LiFi.svg" alt="lifi Logo" />;
 
 export const getChainAvatar = (chainKey: ChainKey) => {

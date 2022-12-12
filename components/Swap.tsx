@@ -222,12 +222,8 @@ function Swap() {
         }}
       >
         <div>
-          <Row
-            gutter={[16, 96]}
-            style={{ paddingTop: 48 }}
-            justify="space-around"
-          >
-            <Col sm={23} lg={23}>
+          <Row gutter={[16, 96]} style={{ paddingTop: 48 }}>
+            <Col sm={24} lg={14}>
               <div>
                 <Row>
                   <Title level={4}>Please Specify Your Transaction</Title>
@@ -258,7 +254,7 @@ function Swap() {
                 </Row>
               </div>
             </Col>
-            <Col sm={23} lg={23} xl={14}>
+            <Col sm={24} lg={10}>
               {routesLoading || noRoutesAvailable || routes.length ? (
                 <RouteList
                   highlightedIndex={highlightedIndex}

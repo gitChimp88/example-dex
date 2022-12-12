@@ -54,7 +54,7 @@ export const RouteList = ({
     <>
       {routes.length > 0 && (
         <Col span={24} style={{ padding: 0 }}>
-          <div className="route-grid" ref={routeCards}>
+          <div ref={routeCards}>
             {routes.map((route, index) => {
               return (
                 <RouteCard
@@ -65,35 +65,17 @@ export const RouteList = ({
                 />
               );
             })}
-            {/* {routesByX.map((routeChunk, chunkIndex) => {
-              return (
-                <Row>
-                  {routeChunk.map((route, index) => {
-                    const combinedIndex = chunkIndex + index
-                    // chunkIndex === 0 ? chunkIndex + index : chunkIndex + 1 + index
-                    return (
-                      <Col span={12}>
-                        <RouteCard
-                          key={combinedIndex}
-                          route={route}
-                          selected={highlightedIndex === combinedIndex}
-                          onSelect={() => setHighlightedIndex(combinedIndex)}
-                        />
-                      </Col>
-                    )
-                  })}
-                </Row>
-              )
-            })} */}
           </div>
         </Col>
       )}
       {routesLoading && !routes.length && (
-        <Col span={24}>
-          <Row justify={'center'} align="middle" style={{ height: 200 }}>
-            <Spin></Spin>
-          </Row>
-        </Col>
+        <Row
+          justify={'center'}
+          align="middle"
+          style={{ height: 200, width: 400 }}
+        >
+          <Spin></Spin>
+        </Row>
       )}
       {!routesLoading && noRoutesAvailable && (
         <Col span={24} className="no-routes-found">
